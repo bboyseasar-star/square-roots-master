@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>このアプリについて｜👹 高校入試対策シリーズ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="screen legal-screen">
+    <a href="./">← ホーム画面に戻る</a>
+    <h1>このアプリについて</h1>
+    <div class="legal-tabs" role="tablist" aria-label="アプリ情報">
+      <button class="primary" role="tab" aria-selected="true" aria-controls="panel" id="notice-tab">利用条件・出典・プライバシー</button>
+      <button class="ghost" role="tab" aria-selected="false" aria-controls="panel" id="license-tab">ライセンス</button>
+    </div>
+    <section class="result-list legal-panel" role="tabpanel" aria-labelledby="notice-tab" id="panel" tabindex="0"></section>
+    <a href="./">← ホーム画面に戻る</a>
+  </main>
+  <script>
+    (() => {
+      'use strict';
+      const panel = document.querySelector('#panel');
+      const tabs = [
+        { id: 'notice-tab', file: 'NOTICE.md', kind: 'markdown' },
+        { id: 'license-tab', file: 'LICENSE', kind: 'license' }
+      ];
+
+      function appendInline(parent, text) {
+        const pattern = /(\[[^\]]+\]\(https?:\/\/[^)]+\)|`[^`]+`)/g;
+        let start = 0;
+        for (const match of text.matchAll(pattern)) {
+          parent.append(document.createTextNode(text.slice(start, match.index)));
+          const token = match[0];
+          if (token.startsWith('`')) {
+            const code = document.createElement('code');
+            code.textContent = token.slice(1, -1);
+            parent.append(code);
+          } else {
+            const parts = token.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/);
+            const link = document.createElement('a');
+            link.textContent = parts[1];
+            link.href = parts[2];
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            parent.append(link);
+          }
+          start = match.index + token.length;
+        }
+        parent.append(document.createTextNode(text.slice(start)));
+      }
+
+      function renderMarkdown(text) {
+        panel.replaceChildren();
+        panel.className = 'result-list legal-panel legal-copy';
+        let list = null;
+        for (const rawLine of text.replace(/\r/g, '').split('\n')) {
+          const line = rawLine.trim();
+          if (!line) { list = null; continue; }
+          let element;
+          if (line.startsWith('## ')) {
+            list = null;
+            element = document.createElement('h2');
+            appendInline(element, line.slice(3));
+          } else if (line.startsWith('# ')) {
+            list = null;
+            element = document.createElement('h2');
+            appendInline(element, line.slice(2));
+          } else if (line.startsWith('- ')) {
+            if (!list) {
+              list = document.createElement('ul');
+              panel.append(list);
+            }
+            element = document.createElement('li');
+            appendInline(element, line.slice(2));
+            list.append(element);
+            continue;
+          } else {
+            list = null;
+            element = document.createElement('p');
+            appendInline(element, line);
+          }
+          panel.append(element);
+        }
+      }
+
+      function renderLicense(text) {
+        panel.replaceChildren();
+        panel.className = 'result-list legal-panel license-copy';
+        const pre = document.createElement('pre');
+        pre.textContent = text;
+        panel.append(pre);
+      }
+
+      async function show(tab) {
+        try {
+          const response = await fetch(tab.file);
+          if (!response.ok) throw new Error(String(response.status));
+          const text = await response.text();
+          tab.kind === 'license' ? renderLicense(text) : renderMarkdown(text);
+          document.querySelectorAll('[role="tab"]').forEach(button => {
+            const selected = button.id === tab.id;
+            button.setAttribute('aria-selected', String(selected));
+            button.className = selected ? 'primary' : 'ghost';
+          });
+          panel.setAttribute('aria-labelledby', tab.id);
+        } catch {
+          panel.textContent = '表示できません。ローカルサーバーから開いてください。';
+        }
+      }
+
+      tabs.forEach(tab => document.querySelector(`#${tab.id}`).addEventListener('click', () => show(tab)));
+      show(tabs[0]);
+    })();
+  </script>
+</body>
+</html>
