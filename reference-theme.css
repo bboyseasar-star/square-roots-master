@@ -32,3 +32,30 @@ body{background:var(--bg);color:var(--ink);overflow:hidden}
 button,math-field,input,textarea,select,a,[role=button],label{position:relative;z-index:40}
 @media(max-width:900px){body{overflow:auto}.screen{height:auto;min-height:100dvh}.problem.work-layout{grid-template-columns:1fr;overflow:visible}.support-card{min-height:210px}.screen>.progress{margin:0}.question-card{overflow:visible}#handwriting-fixed-mount{right:12px;bottom:12px}}
 @media(max-height:700px) and (min-width:901px){.question-card{padding:14px}.support-card{padding:13px}.question-card .problem-expression{min-height:5.5rem!important}}
+/* 判定の出し分け（あと一歩・書き方・△は、値の誤りと色で区別する） */
+.feedback.unfinished{background:#fff7e6;border-color:#b45309}
+.feedback.unfinished>b{color:#92400e}
+.feedback.notation{background:#f5f0ff;border-color:#6d28d9}
+.feedback.notation>b{color:#5b21b6}
+.feedback.neg{background:#fffbeb;border-color:#a16207}
+.feedback-msg{font-weight:700}
+.input-msg{min-height:1.4em;margin:-6px 0 4px;color:#9a3412;font-weight:700;font-size:.95rem}
+
+/* 仮想キーボードが出ている間（html.vk-open）は、高さ固定をゆるめて入力欄・決定・判定をキーボードの上へ（linear と同じ） */
+html.vk-open,html.vk-open body{height:auto;min-height:100%;overflow:auto}
+html.vk-open body{padding-bottom:var(--vk-height,0px)}
+html.vk-open .screen,html.vk-open .problem.work-layout,html.vk-open .question-card,html.vk-open .support-card{height:auto;overflow:visible}
+html.vk-open .support-card #hintbox{flex:none;max-height:none;overflow:visible}
+/* 判定文が長くても「次へ」が支援カードの中に見えるように、判定はカードの中でスクロールさせる */
+.support-card>.feedback{flex:0 1 auto;min-height:0;overflow-y:auto}
+.support-card>#next{flex:0 0 auto}
+@media (max-height:820px){.support-card>.feedback{padding:10px 12px;margin:8px 0;line-height:1.5}.support-card #hintbox{min-height:2.5rem}}
+
+/* 採点後に使えないボタンは、押せないことが分かる見た目に */
+.question-card button:disabled,.support-card button:disabled{opacity:.45;cursor:not-allowed}
+/* 記号問題の ア〜オ のボタンと、選択肢の記号と値の間 */
+.question-card .choice-key{min-width:52px;font-size:1.1rem;font-weight:700}
+.question-card .choice-key[aria-pressed="true"]{background:var(--primary-soft);border-color:var(--primary)}
+.choice-opt{display:inline-block;margin:0 1.4em 4px 0;white-space:nowrap}
+/* 1列のとき、手書きツールバーの下に「次へ」が隠れないように、画面の下に余白をとる */
+@media(max-width:900px){.screen{padding-bottom:96px}}

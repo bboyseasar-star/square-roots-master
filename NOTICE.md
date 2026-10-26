@@ -6,7 +6,9 @@
 
 このアプリは沖縄県および沖縄県教育委員会の公式アプリではなく、両者による承認・後援を示すものではありません。
 
-使用する第三者部品はMathJax (Apache-2.0)、MathLive (MIT)、BIZ UDPGothicおよびOutfit (OFL-1.1)です。第三者部分はそれぞれのライセンスに従います。公式配布元、ライセンス種別、通信先はDEPENDENCIES.mdに記載しています。
+使用する第三者部品はMathJax 3.2.2 (Apache-2.0)、MathLive 0.101.0 (MIT)、BIZ UDPGothicおよびOutfit (OFL-1.1)です。第三者部分はそれぞれのライセンスに従います。公式配布元、ライセンス種別、通信先はDEPENDENCIES.mdに記載しています。
+
+同梱の `grader-core.js`・`nyushi-core.js`・`handwriting-overlay.js`・`question-layout.js` は作成者による自作のプログラムで、第三者のコードを含みません。上記のMIT Licenseの対象（作者が権利を有する独自プログラム）に含まれます。
 
 氏名・学校名・学籍番号などの個人情報は収集しません。端末内のlocalStorageには通常セットの履歴のみを保存し、学習履歴・答案・手書き内容を外部サーバーへ送信しません。
 

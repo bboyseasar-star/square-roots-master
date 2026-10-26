@@ -1,0 +1,8 @@
+.DS_Store
+.claude/
+.codex/
+# 公開しない社内記録
+SPEC.md
+START_PROMPT.md
+ANSWER_QA.md
+LEGAL_REVIEW.md

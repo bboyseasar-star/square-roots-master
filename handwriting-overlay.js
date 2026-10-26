@@ -1,6 +1,7 @@
 (() => {
   'use strict';
-  const protectedSelector='button,math-field,input,textarea,select,a,[role="button"],label';
+  // 仮想キーボード（MathLive 0.101.0 は .ML__keyboard の中に .MLK__keycap など）も保護して、キーを押しても点を付けない
+  const protectedSelector='button,math-field,input,textarea,select,a,[role="button"],label,.ML__keyboard,.ML__keyboard *,[class^="MLK__"],[class*=" MLK__"]';
   let canvas,ctx,bar,penButton,eraserButton,clearButton,available=false,tool=null,activePointer=null,last=null,hasMarks=false;
   function ensure(){
     if(canvas)return;
